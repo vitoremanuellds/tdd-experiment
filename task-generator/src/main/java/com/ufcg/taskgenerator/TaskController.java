@@ -1,24 +1,22 @@
 package com.ufcg.taskgenerator;
 
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
-@RestController
+
 @RequestMapping("/api")
-@CrossOrigin
+@RestController
 public class TaskController
 {
     @Autowired
     private TaskService taskService;
 
-    @RequestMapping(value = "/task-generator", method = RquestMethod.POST)
-    public ResponseEntity<?> createTask(@RequestBody TaskDTO taskDTO, UriComponentBuilder ucBuilder)
+    @RequestMapping(value = "/task-generator", method = RequestMethod.POST)
+    public ResponseEntity<?> createTask(@RequestBody TaskDTO taskDTO)
     {
         Task newTask;
 
@@ -30,10 +28,9 @@ public class TaskController
         return new ResponseEntity<Task>(newTask, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/task-generator?{id}", method = RquestMethod.PATCH)
+    @RequestMapping(value = "/task-generator?{id}", method = RequestMethod.PATCH)
     public ResponseEntity<?> updateTask(@PathVariable("id") String id,
-                                        @RequestBody TaskDTO taskDTO,
-                                        UriComponentBuilder ucBuilder)
+                                        @RequestBody TaskDTO taskDTO)
     {
         Task modifiedTask;
 
@@ -45,7 +42,7 @@ public class TaskController
         return new ResponseEntity<Task>(modifiedTask, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/task-generator?{id}", method = RquestMethod.DELETE)
+    @RequestMapping(value = "/task-generator?{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteTask(@PathVariable("id") String id)
     {
         Task deletedTask;
@@ -58,7 +55,7 @@ public class TaskController
         return new ResponseEntity<Task>(deletedTask, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/task-generator{id}", method = RquestMethod.POST)
+    @RequestMapping(value = "/task-generator{id}", method = RequestMethod.POST)
     public ResponseEntity<?> getTasks(@PathVariable("id") String id)
     {
         List<Task> tasks;

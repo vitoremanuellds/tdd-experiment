@@ -1,5 +1,6 @@
 package com.ufcg.taskgenerator;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.assertj.core.util.diff.DeleteDelta;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,6 @@ import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilde
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.http.MediaType;
-import org.springframework.scheduling.config.Task;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,10 +29,11 @@ public class TaskGeneratorIntegrationTests
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    TaskService taskService;
 
     @Test
-    void TaskController_Should_CreateTask_When_GivenTaskInfo() throws Exception
-    {
+    void TaskController_Should_CreateTask_When_GivenTaskInfo() throws Exception {
         // Arrange
         TaskDTO task = new TaskDTO(
                 "Lavar Roupa",
@@ -41,16 +42,18 @@ public class TaskGeneratorIntegrationTests
                 PRIORITY.MEDIUM);
 
         // Test
-        Task testTask = mockMvc.perform(post("/api/task-generator")
-                .contentType("application/jason")
+        String strTask = mockMvc.perform(post("/api/task-generator")
+                .contentType("application/json")
                 .content(objectMapper.writeValueAsString(task)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+        com.ufcg.taskgenerator.Task testTask = objectMapper.readValue(strTask, com.ufcg.taskgenerator.Task.class);
 
         // Assert
-        assertEquals(task.getTitle(), testTask.getTitle);
-        assertEquals(task.getDescription, testTask.getDescription);
-        assertEquals(task.getExpirationDate, testTask.getExpirationDate);
-        assertEquals(task.getPriority, testTask.getPriority);
+        assertEquals(task.getTitle(), testTask.getTitle());
+        assertEquals(task.getDescription(), testTask.getDescription());
+        assertEquals(new Date("25/08/2023"), testTask.getExpirationDate());
+        assertEquals(task.getPriority(), testTask.getPriority());
     }
 
     @Test
@@ -63,24 +66,27 @@ public class TaskGeneratorIntegrationTests
                 "24/08/2023",
                 PRIORITY.LOW);
 
-        Task task = Task(
+        com.ufcg.taskgenerator.Task task =
+                new com.ufcg.taskgenerator.Task(
                 "id",
                 "Lavar Roupa",
                 "Lavar roupa do cesto vermelho",
-                "25/08/2023",
+                new Date("25/08/2023"),
                 PRIORITY.MEDIUM);
 
+        taskService.addTask(task);
+
         // Test
-        Task modTask = mockMvc.perform(patch("/api/task-generator?{id}", "id")
-                        .contentType("application/jason")
+        String modTask = mockMvc.perform(patch("/api/task-generator?{id}", "id")
+                        .contentType("application/json")
                         .content(objectMapper.writeValueAsString(taskDTO)))
-                        .andExpect(status().isOk());
+                        .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
         // Assert
-        assertEquals(task.getTitle, "Lavar Carro");
-        assertEquals(task.getDescription, "Lavar Carro");
-        assertEquals(task.getExpirationDate, "24/08/2023");
-        assertEquals(task.getPriority, PRIORITY.LOW);
+        assertEquals(task.getTitle(), taskDTO.getTitle());
+        assertEquals(task.getDescription(), taskDTO.getDescription());
+        assertEquals(task.getExpirationDate(), new Date("24/08/2023"));
+        assertEquals(task.getPriority(), taskDTO.getPriority());
     }
 
     @Test
@@ -94,25 +100,33 @@ public class TaskGeneratorIntegrationTests
                 PRIORITY.LOW);
 
         // Test
-        Task task = mockMvc.perform(post("/api/task-generator")
+        String strTask = mockMvc.perform(post("/api/task-generator")
                         .contentType("application/jason")
                         .content(objectMapper.writeValueAsString(taskDTO)))
-                        .andExpect(status().isOk());
+                        .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
-        mockMvc.perform(delete("/api/task-generator?{id}", task.getId))
+        com.ufcg.taskgenerator.Task task = objectMapper.readValue(strTask, com.ufcg.taskgenerator.Task.class);
+
+        mockMvc.perform(delete("/api/task-generator?{id}", task.getId()))
                         .andExpect(status().isOk());
 
         // Assert
-        assertNull(task);
+        assertTrue(taskService.getTasks().contains(task));
     }
 
     void TaskController_Should_ReturnAllTasks_When_GivenTaskId() throws Exception
     {
         // Arrange
-        String id = "id";
+        List<Task> tasks = taskService.getTasks();
 
         // Test
-        mockMvc.perform(get("/api/task-generator?{id}", id))
-                .andExpect(status().isOk());
+        String strTask = mockMvc.perform(get("/api/task-generator"))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+        List<com.ufcg.taskgenerator.Task> testTask = (List<com.ufcg.taskgenerator.Task>)objectMapper.readValue(strTask, List.class);
+
+        // Assert
+        assertEquals(testTask.getClass(), List.class);
+        assertEquals(tasks, testTask);
     }
 }
