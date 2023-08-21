@@ -2,17 +2,21 @@ package com.ufcg.taskgenerator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.assertj.core.util.diff.DeleteDelta;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.http.MediaType;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TaskGeneratorIntegrationTests
 {
 
@@ -31,6 +36,11 @@ public class TaskGeneratorIntegrationTests
     private ObjectMapper objectMapper;
     @Autowired
     TaskService taskService;
+    @Autowired
+    TaskRepository taskRepository;
+
+    @BeforeEach
+    void newRepoHashmap(){this.taskRepository.deleteAll();}
 
     @Test
     void TaskController_Should_CreateTask_When_GivenTaskInfo() throws Exception {
@@ -43,7 +53,7 @@ public class TaskGeneratorIntegrationTests
 
         // Test
         String strTask = mockMvc.perform(post("/api/task-generator")
-                .contentType("application/json")
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(task)))
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
@@ -52,7 +62,7 @@ public class TaskGeneratorIntegrationTests
         // Assert
         assertEquals(task.getTitle(), testTask.getTitle());
         assertEquals(task.getDescription(), testTask.getDescription());
-        assertEquals(new Date("25/08/2023"), testTask.getExpirationDate());
+        assertEquals("25/08/2023", testTask.getExpirationDate());
         assertEquals(task.getPriority(), testTask.getPriority());
     }
 
@@ -71,21 +81,21 @@ public class TaskGeneratorIntegrationTests
                 "id",
                 "Lavar Roupa",
                 "Lavar roupa do cesto vermelho",
-                new Date("25/08/2023"),
+                "25/08/2023",
                 PRIORITY.MEDIUM);
 
         taskService.addTask(task);
 
         // Test
-        String modTask = mockMvc.perform(patch("/api/task-generator?{id}", "id")
-                        .contentType("application/json")
+        String modTask = mockMvc.perform(patch(String.format("/api/task-generator/%s", "id"))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(taskDTO)))
                         .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
         // Assert
         assertEquals(task.getTitle(), taskDTO.getTitle());
         assertEquals(task.getDescription(), taskDTO.getDescription());
-        assertEquals(task.getExpirationDate(), new Date("24/08/2023"));
+        assertEquals(task.getExpirationDate(),"24/08/2023");
         assertEquals(task.getPriority(), taskDTO.getPriority());
     }
 
@@ -101,7 +111,7 @@ public class TaskGeneratorIntegrationTests
 
         // Test
         String strTask = mockMvc.perform(post("/api/task-generator")
-                        .contentType("application/jason")
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(taskDTO)))
                         .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
@@ -114,6 +124,7 @@ public class TaskGeneratorIntegrationTests
         assertTrue(taskService.getTasks().contains(task));
     }
 
+    @Test
     void TaskController_Should_ReturnAllTasks_When_GivenTaskId() throws Exception
     {
         // Arrange
@@ -126,7 +137,8 @@ public class TaskGeneratorIntegrationTests
         List<com.ufcg.taskgenerator.Task> testTask = (List<com.ufcg.taskgenerator.Task>)objectMapper.readValue(strTask, List.class);
 
         // Assert
-        assertEquals(testTask.getClass(), List.class);
+        assertTrue(testTask instanceof List);
         assertEquals(tasks, testTask);
+
     }
 }

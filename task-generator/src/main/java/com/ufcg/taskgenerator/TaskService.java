@@ -36,4 +36,8 @@ public class TaskService
     public List<Task> getTasks() throws Exception {
         return taskRepository.getTasks();
     }
+
+    public void addTask(Task task) {
+        taskRepository.createTask(task);
+    }
 }

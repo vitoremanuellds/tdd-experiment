@@ -44,4 +44,8 @@ public class TaskRepository {
     {
         return new ArrayList<>(this.tasks.values());
     }
+
+    public void deleteAll() {
+        this.tasks = new HashMap<>();
+    }
 }

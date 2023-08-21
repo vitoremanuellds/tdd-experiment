@@ -28,7 +28,7 @@ public class TaskController
         return new ResponseEntity<Task>(newTask, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/task-generator?{id}", method = RequestMethod.PATCH)
+    @RequestMapping(value = "/task-generator/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<?> updateTask(@PathVariable("id") String id,
                                         @RequestBody TaskDTO taskDTO)
     {
@@ -55,7 +55,7 @@ public class TaskController
         return new ResponseEntity<Task>(deletedTask, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/task-generator{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/task-generator{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getTasks(@PathVariable("id") String id)
     {
         List<Task> tasks;
