@@ -19,13 +19,11 @@ public class TaskService
 
 
     public Task createTask(TaskDTO taskDTO) throws Exception {
-        Date expireDate = formatter.parse(taskDTO.getDate());
-        return new Task(taskDTO.getTitle(), taskDTO.getDescription(), expireDate, taskDTO.getPriority());
+        return new Task(taskDTO.getTitle(), taskDTO.getDescription(), taskDTO.getDate(), taskDTO.getPriority());
     }
 
     public Task updateTask(String id, TaskDTO taskDTO) throws Exception {
-        Date expireDate = formatter.parse(taskDTO.getDate());
-        Task auxTask = new Task(taskDTO.getTitle(), taskDTO.getDescription(), expireDate, taskDTO.getPriority());
+        Task auxTask = new Task(taskDTO.getTitle(), taskDTO.getDescription(), taskDTO.getDate(), taskDTO.getPriority());
         return taskRepository.updateTask(id, auxTask);
     }
 

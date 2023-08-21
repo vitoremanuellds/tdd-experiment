@@ -16,9 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -32,8 +30,7 @@ public class TaskGeneratorIntegrationTests
 
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     TaskService taskService;
     @Autowired
@@ -57,7 +54,17 @@ public class TaskGeneratorIntegrationTests
                 .content(objectMapper.writeValueAsString(task)))
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
-        com.ufcg.taskgenerator.Task testTask = objectMapper.readValue(strTask, com.ufcg.taskgenerator.Task.class);
+        Map<String, String> mapTask = objectMapper.readValue(strTask, HashMap.class);
+        Task testTask = new Task();
+
+        testTask.setId(mapTask.get("id"));
+        testTask.setTitle(mapTask.get("title"));
+        testTask.setDescription(mapTask.get("description"));
+        testTask.setExpirationDate(mapTask.get("expirationDate"));
+        testTask.setPriority(
+                Arrays.asList(PRIORITY.values()).stream().filter(p ->
+                        p.toString().equals(mapTask.get("priority"))).findFirst().get()
+        );
 
         // Assert
         assertEquals(task.getTitle(), testTask.getTitle());
@@ -110,18 +117,28 @@ public class TaskGeneratorIntegrationTests
                 PRIORITY.LOW);
 
         // Test
-        String strTask = mockMvc.perform(post("/api/task-generator")
+        String strTask = mockMvc.perform(delete("/api/task-generator")
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(taskDTO)))
                         .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
-        com.ufcg.taskgenerator.Task task = objectMapper.readValue(strTask, com.ufcg.taskgenerator.Task.class);
+        Map<String, String> mapTask = objectMapper.readValue(strTask, HashMap.class);
+        Task testTask = new Task();
 
-        mockMvc.perform(delete("/api/task-generator?{id}", task.getId()))
+        testTask.setId(mapTask.get("id"));
+        testTask.setTitle(mapTask.get("title"));
+        testTask.setDescription(mapTask.get("description"));
+        testTask.setExpirationDate(mapTask.get("expirationDate"));
+        testTask.setPriority(
+                Arrays.asList(PRIORITY.values()).stream().filter(p ->
+                        p.toString().equals(mapTask.get("priority"))).findFirst().get()
+        );
+
+        mockMvc.perform(delete("/api/task-generator?{id}", testTask.getId()))
                         .andExpect(status().isOk());
 
         // Assert
-        assertTrue(taskService.getTasks().contains(task));
+        assertTrue(taskService.getTasks().contains(testTask));
     }
 
     @Test

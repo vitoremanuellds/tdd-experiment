@@ -8,10 +8,11 @@ public class Task {
     String id;
     String title;
     String description;
-    Date expirationDate;
+    String expirationDate;
     PRIORITY priority;
 
-    public Task(String id, String title, String description, Date expirationDate, PRIORITY priority)
+    public Task(){};
+    public Task(String id, String title, String description, String expirationDate, PRIORITY priority)
     {
         this.id = id;
         this.title = title;
@@ -19,7 +20,7 @@ public class Task {
         this.expirationDate = expirationDate;
         this.priority = priority;
     }
-    public Task(String title, String description, Date expirationDate, PRIORITY priority)
+    public Task(String title, String description, String expirationDate, PRIORITY priority)
     {
         this.id = UUID.randomUUID().toString();
         this.title = title;
@@ -40,7 +41,7 @@ public class Task {
         return description;
     }
 
-    public Date getExpirationDate() {
+    public String getExpirationDate() {
         return expirationDate;
     }
 
@@ -60,7 +61,7 @@ public class Task {
         this.description = description;
     }
 
-    public void setExpirationDate(Date expirationDate) {
+    public void setExpirationDate(String expirationDate) {
         this.expirationDate = expirationDate;
     }
 
