@@ -117,7 +117,7 @@ public class TaskGeneratorIntegrationTests
                 PRIORITY.LOW);
 
         // Test
-        String strTask = mockMvc.perform(delete("/api/task-generator")
+        String strTask = mockMvc.perform(delete("/api/task-generator/%s", "id")
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(taskDTO)))
                         .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
