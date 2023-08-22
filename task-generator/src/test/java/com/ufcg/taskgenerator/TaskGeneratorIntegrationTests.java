@@ -117,7 +117,7 @@ public class TaskGeneratorIntegrationTests
                 PRIORITY.LOW);
 
         // Test
-        String strTask = mockMvc.perform(delete("/api/task-generator/%s", "id")
+        String strTask = mockMvc.perform(post("/api/task-generator")
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(taskDTO)))
                         .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
@@ -134,11 +134,11 @@ public class TaskGeneratorIntegrationTests
                         p.toString().equals(mapTask.get("priority"))).findFirst().get()
         );
 
-        mockMvc.perform(delete("/api/task-generator?{id}", testTask.getId()))
-                        .andExpect(status().isOk());
+        String deleted = mockMvc.perform(delete("/api/task-generator/{id}", testTask.getId()))
+                        .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
         // Assert
-        assertTrue(taskService.getTasks().contains(testTask));
+        assertFalse(taskService.getTasks().contains(testTask));
     }
 
     @Test

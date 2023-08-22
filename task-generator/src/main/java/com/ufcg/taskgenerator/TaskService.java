@@ -15,8 +15,6 @@ public class TaskService
 {
     @Autowired
     private TaskRepository taskRepository;
-    private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-
 
     public Task createTask(TaskDTO taskDTO) throws Exception {
         return new Task(taskDTO.getTitle(), taskDTO.getDescription(), taskDTO.getDate(), taskDTO.getPriority());

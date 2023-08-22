@@ -42,7 +42,7 @@ public class TaskController
         return new ResponseEntity<Task>(modifiedTask, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/task-generator?{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/task-generator/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteTask(@PathVariable("id") String id)
     {
         Task deletedTask;

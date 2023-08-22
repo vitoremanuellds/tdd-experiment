@@ -26,7 +26,7 @@ public class TaskRepository {
            if(x.equals(id)){
                if(!auxTask.getTitle().isEmpty()){y.setTitle(auxTask.getTitle());}
                if(!auxTask.getDescription().isEmpty()){y.setDescription(auxTask.getDescription());}
-               if(auxTask.getExpirationDate().isEmpty()){y.setExpirationDate(auxTask.getExpirationDate());}
+               if(!auxTask.getExpirationDate().isEmpty()){y.setExpirationDate(auxTask.getExpirationDate());}
                if(auxTask.getPriority() != PRIORITY.NIL){y.setPriority(auxTask.getPriority());}
            }
         });
