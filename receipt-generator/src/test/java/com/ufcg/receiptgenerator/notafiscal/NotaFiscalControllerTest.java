@@ -12,8 +12,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufcg.receiptgenerator.fatura.Fatura;
+import com.ufcg.receiptgenerator.fatura.TiposDeServico;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -40,8 +42,8 @@ public class NotaFiscalControllerTest {
     void NotaFiscalController_WhenGenerateNotaFiscalIsCalled_ShouldReturnANotaFiscal() throws Exception {
 
         // Arrange
-        Fatura fatura = new Fatura("Vitor", "Rua dos Bobos, 0", TiposDeFaturas.OUTROS, 1000.00);
-        doReturn(new NotaFiscal(fatura.clientName, fatura.value, fatura.value * this.OUTROS_TAX_VALUE))
+        Fatura fatura = new Fatura("Vitor", "Rua dos Bobos, 0", TiposDeServico.OUTROS, 1000.00);
+        doReturn(new NotaFiscal(fatura.getClientName(), fatura.getValue(), fatura.getValue() * this.OUTROS_TAX_VALUE))
             .when(this.notaFiscalServiceMock)
             .generateNotaFiscal(any(Fatura.class));
 
@@ -58,9 +60,9 @@ public class NotaFiscalControllerTest {
     void NotaFiscalController_WhenGenerateNotaFiscalIsCalledAndFaturaHasANegativeValue_ShouldReturnAStringMessageAndStatusCodeAsBadRequest() throws Exception {
 
         // Arrange
-        Fatura fatura = new Fatura("Alexsandro", "Rua das Bananeiras, 10", TiposDeFaturas.CONSULTORIA, 100.00);
+        Fatura fatura = new Fatura("Alexsandro", "Rua das Bananeiras, 10", TiposDeServico.CONSULTORIA, 100.00);
 
-        doReturn(new NotaFiscal(fatura.clientName, fatura.value, fatura.value * this.OUTROS_TAX_VALUE))
+        doReturn(new NotaFiscal(fatura.getClientName(), fatura.getValue(), fatura.getValue() * this.OUTROS_TAX_VALUE))
             .when(this.notaFiscalServiceMock)
             .generateNotaFiscal(any(Fatura.class));
 
@@ -77,9 +79,9 @@ public class NotaFiscalControllerTest {
     void NotaFiscalController_WhenGenerateNotaFiscalIsCalledAndFaturaHasAValidValue_ShouldReturnAStatusCodeAsOk() throws Exception {
 
         // Arrange
-        Fatura fatura = new Fatura("Alexsandro", "Rua das Bananeiras, 10", TiposDeFaturas.CONSULTORIA, 100.00);
+        Fatura fatura = new Fatura("Alexsandro", "Rua das Bananeiras, 10", TiposDeServico.CONSULTORIA, 100.00);
 
-        doReturn(new NotaFiscal(fatura.clientName, fatura.value, fatura.value * this.OUTROS_TAX_VALUE))
+        doReturn(new NotaFiscal(fatura.getClientName(), fatura.getValue(), fatura.getValue() * this.OUTROS_TAX_VALUE))
             .when(this.notaFiscalServiceMock)
             .generateNotaFiscal(any(Fatura.class));
 
