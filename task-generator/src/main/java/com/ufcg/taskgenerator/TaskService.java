@@ -32,6 +32,7 @@ public class TaskService
 
     public Task updateTask(String id, TaskDTO taskDTO) throws Exception {
         Task auxTask = new Task(taskDTO.getTitle(), taskDTO.getDescription(), taskDTO.getDate(), taskDTO.getPriority());
+        if(this.taskRepository.getTask(id) == null){throw new Exception();}
         return taskRepository.updateTask(id, auxTask);
     }
 

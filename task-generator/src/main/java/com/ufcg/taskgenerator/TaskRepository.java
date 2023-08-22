@@ -54,6 +54,9 @@ public class TaskRepository {
     }
 
     public Task getTask(String id) {
-        return this.tasks.get(id);
+        if(this.tasks.containsKey(id)){
+            return this.tasks.get(id);
+        }
+        return null;
     }
 }

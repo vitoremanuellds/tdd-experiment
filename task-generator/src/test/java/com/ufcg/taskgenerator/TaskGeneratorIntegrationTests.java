@@ -186,7 +186,7 @@ public class TaskGeneratorIntegrationTests
                 .andExpect(status().isForbidden()).andReturn().getResponse().getContentAsString();
 
         // Assert
-        assertNotEquals("error", modTask);
+        assertEquals("error", modTask);
     }
 
     @Test
