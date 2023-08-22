@@ -12,12 +12,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufcg.receiptgenerator.fatura.Fatura;
+import com.ufcg.receiptgenerator.fatura.InvalidFaturaValueException;
 import com.ufcg.receiptgenerator.fatura.TiposDeServico;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -56,17 +58,13 @@ public class NotaFiscalControllerTest {
 
 
     @Test
-    void NotaFiscalController_WhenGenerateNotaFiscalIsCalledAndFaturaHasANegativeValue_ShouldReturnAStringMessageAndStatusCodeAsBadRequest() throws Exception {
+    void NotaFiscalController_WhenGenerateNotaFiscalIsCalledAndInvalidFaturaValueExceptionIsThrown_ShouldReturnAStringMessageAndStatusCodeAsBadRequest() throws Exception {
 
         // Arrange
-        Fatura fatura = new Fatura("Alexsandro", "Rua das Bananeiras, 10", TiposDeServico.CONSULTORIA, 100.00);
-
-        doReturn(new NotaFiscal(fatura.getClientName(), fatura.getValue(), fatura.getValue() * this.OUTROS_TAX_VALUE))
-            .when(this.notaFiscalServiceMock)
-            .generateNotaFiscal(any(Fatura.class));
+        doThrow(InvalidFaturaValueException.class).when(this.notaFiscalServiceMock).generateNotaFiscal(any(Fatura.class));
 
         //Test
-        ResponseEntity response = this.notaFiscalController.generateNotaFiscal(fatura);
+        ResponseEntity response = this.notaFiscalController.generateNotaFiscal(new Fatura());
 
         // Assert
         assertTrue(response.getStatusCode().equals(HttpStatus.BAD_REQUEST));
