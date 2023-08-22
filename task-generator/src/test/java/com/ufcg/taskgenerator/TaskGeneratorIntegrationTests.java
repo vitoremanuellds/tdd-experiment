@@ -74,6 +74,26 @@ public class TaskGeneratorIntegrationTests
     }
 
     @Test
+    void TaskController_Should_NotCreateTask_When_EmptyTitle() throws Exception {
+        // Arrange
+        TaskDTO task = new TaskDTO(
+                "",
+                "Lavar roupa do cesto vermelho",
+                "25/08/2023",
+                PRIORITY.MEDIUM);
+
+        // Test
+        String strTask = mockMvc.perform(post("/api/task-generator")
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(task)))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+
+        // Assert
+        assertEquals( "error", strTask);
+    }
+
+    @Test
     void TaskController_Should_ModifyTask_When_GivenTaskNewInfo() throws Exception
     {
         // Arrange
@@ -102,6 +122,39 @@ public class TaskGeneratorIntegrationTests
         // Assert
         assertEquals(task.getTitle(), taskDTO.getTitle());
         assertEquals(task.getDescription(), taskDTO.getDescription());
+        assertEquals(task.getExpirationDate(),"24/08/2023");
+        assertEquals(task.getPriority(), taskDTO.getPriority());
+    }
+
+    @Test
+    void TaskController_Should_NotModifyTaskField_When_GivenNoTaskNewInfo() throws Exception
+    {
+        // Arrange
+        TaskDTO taskDTO = new TaskDTO(
+                "",
+                "",
+                "24/08/2023",
+                PRIORITY.LOW);
+
+        com.ufcg.taskgenerator.Task task =
+                new com.ufcg.taskgenerator.Task(
+                        "id",
+                        "Lavar Roupa",
+                        "Lavar roupa do cesto vermelho",
+                        "25/08/2023",
+                        PRIORITY.MEDIUM);
+
+        taskService.addTask(task);
+
+        // Test
+        String modTask = mockMvc.perform(patch(String.format("/api/task-generator/%s", "id"))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(taskDTO)))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+        // Assert
+        assertNotEquals(task.getTitle(), taskDTO.getTitle());
+        assertNotEquals(task.getDescription(), taskDTO.getDescription());
         assertEquals(task.getExpirationDate(),"24/08/2023");
         assertEquals(task.getPriority(), taskDTO.getPriority());
     }
@@ -142,7 +195,43 @@ public class TaskGeneratorIntegrationTests
     }
 
     @Test
-    void TaskController_Should_ReturnAllTasks_When_GivenTaskId() throws Exception
+    void TaskController_Should_NotDeleteTask_When_GivenInvalidId() throws Exception
+    {
+        // Arrange
+        TaskDTO taskDTO = new TaskDTO(
+                "Lavar Carro",
+                "Lavar Carro",
+                "24/08/2023",
+                PRIORITY.LOW);
+
+        // Test
+        String strTask = mockMvc.perform(post("/api/task-generator")
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(taskDTO)))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+        Map<String, String> mapTask = objectMapper.readValue(strTask, HashMap.class);
+        Task testTask = new Task();
+
+        testTask.setId(mapTask.get("id"));
+        testTask.setTitle(mapTask.get("title"));
+        testTask.setDescription(mapTask.get("description"));
+        testTask.setExpirationDate(mapTask.get("expirationDate"));
+        testTask.setPriority(
+                Arrays.asList(PRIORITY.values()).stream().filter(p ->
+                        p.toString().equals(mapTask.get("priority"))).findFirst().get()
+        );
+
+        String deleted = mockMvc.perform(delete("/api/task-generator/{id}", "notId"))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+        // Assert
+        assertTrue(taskService.getTasks().contains(testTask));
+        assertEquals("error", deleted);
+    }
+
+    @Test
+    void TaskController_Should_ReturnAllTasks_When_GetTasksCalled() throws Exception
     {
         // Arrange
         List<Task> tasks = taskService.getTasks();
@@ -156,6 +245,24 @@ public class TaskGeneratorIntegrationTests
         // Assert
         assertTrue(testTask instanceof List);
         assertEquals(tasks, testTask);
+
+    }
+
+    @Test
+    void TaskController_Should_NotReturnAllTasks_When_EmptyMap() throws Exception
+    {
+        // Arrange
+        List<Task> tasks = taskService.getTasks();
+
+        // Test
+        String strTask = mockMvc.perform(get("/api/task-generator"))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+        List<com.ufcg.taskgenerator.Task> testTask = (List<com.ufcg.taskgenerator.Task>)objectMapper.readValue(strTask, List.class);
+
+        // Assert
+        assertTrue(tasks.isEmpty());
+        assertEquals("error", strTask);
 
     }
 }
