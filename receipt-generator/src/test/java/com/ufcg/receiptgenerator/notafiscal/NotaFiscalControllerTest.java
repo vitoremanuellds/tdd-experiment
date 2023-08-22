@@ -87,7 +87,4 @@ public class NotaFiscalControllerTest {
         // Assert
         assertTrue(response.getStatusCode().equals(HttpStatus.OK));
     }
-
-
-    
 }
