@@ -11,6 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ufcg.receiptgenerator.communication.SAP;
+import com.ufcg.receiptgenerator.communication.SMTP;
+import com.ufcg.receiptgenerator.fatura.Fatura;
 
 @SpringBootTest
 public class NotaFiscalServiceTest {
