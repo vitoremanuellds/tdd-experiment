@@ -33,10 +33,13 @@ public class TaskRepository {
         return tasks.get(id);
     }
 
-    public Task deleteTask(String id)
-    {
-        Task deleted = tasks.get(id);
-        tasks.remove(id);
+    public Task deleteTask(String id) {
+        Task deleted = null;
+        if (tasks.containsKey(id)){
+            deleted = tasks.get(id);
+            tasks.remove(id);
+        }
+
         return deleted;
     }
 
@@ -45,7 +48,12 @@ public class TaskRepository {
         return new ArrayList<>(this.tasks.values());
     }
 
-    public void deleteAll() {
+    public void deleteAll()
+    {
         this.tasks = new HashMap<>();
+    }
+
+    public Task getTask(String id) {
+        return this.tasks.get(id);
     }
 }

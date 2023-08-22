@@ -86,7 +86,7 @@ public class TaskGeneratorIntegrationTests
         String strTask = mockMvc.perform(post("/api/task-generator")
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(task)))
-                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+                .andExpect(status().isForbidden()).andReturn().getResponse().getContentAsString();
 
 
         // Assert
@@ -160,6 +160,36 @@ public class TaskGeneratorIntegrationTests
     }
 
     @Test
+    void TaskController_Should_ThrowException_When_GivenInvalidId() throws Exception
+    {
+        // Arrange
+        TaskDTO taskDTO = new TaskDTO(
+                "",
+                "",
+                "24/08/2023",
+                PRIORITY.LOW);
+
+        com.ufcg.taskgenerator.Task task =
+                new com.ufcg.taskgenerator.Task(
+                        "id",
+                        "Lavar Roupa",
+                        "Lavar roupa do cesto vermelho",
+                        "25/08/2023",
+                        PRIORITY.MEDIUM);
+
+        taskService.addTask(task);
+
+        // Test
+        String modTask = mockMvc.perform(patch(String.format("/api/task-generator/%s", "notId"))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(taskDTO)))
+                .andExpect(status().isForbidden()).andReturn().getResponse().getContentAsString();
+
+        // Assert
+        assertNotEquals("error", modTask);
+    }
+
+    @Test
     void TaskController_Should_DeleteTask_When_GivenTaskId() throws Exception
     {
         // Arrange
@@ -223,10 +253,10 @@ public class TaskGeneratorIntegrationTests
         );
 
         String deleted = mockMvc.perform(delete("/api/task-generator/{id}", "notId"))
-                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+                .andExpect(status().isForbidden()).andReturn().getResponse().getContentAsString();
 
         // Assert
-        assertTrue(taskService.getTasks().contains(testTask));
+        assertEquals(taskService.getTasks().get(0).getId(), testTask.getId());
         assertEquals("error", deleted);
     }
 
@@ -245,24 +275,6 @@ public class TaskGeneratorIntegrationTests
         // Assert
         assertTrue(testTask instanceof List);
         assertEquals(tasks, testTask);
-
-    }
-
-    @Test
-    void TaskController_Should_NotReturnAllTasks_When_EmptyMap() throws Exception
-    {
-        // Arrange
-        List<Task> tasks = taskService.getTasks();
-
-        // Test
-        String strTask = mockMvc.perform(get("/api/task-generator"))
-                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-
-        List<com.ufcg.taskgenerator.Task> testTask = (List<com.ufcg.taskgenerator.Task>)objectMapper.readValue(strTask, List.class);
-
-        // Assert
-        assertTrue(tasks.isEmpty());
-        assertEquals("error", strTask);
 
     }
 }

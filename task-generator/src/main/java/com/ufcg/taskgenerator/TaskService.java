@@ -17,7 +17,17 @@ public class TaskService
     private TaskRepository taskRepository;
 
     public Task createTask(TaskDTO taskDTO) throws Exception {
-        return new Task(taskDTO.getTitle(), taskDTO.getDescription(), taskDTO.getDate(), taskDTO.getPriority());
+
+        if(taskDTO.getTitle().isEmpty()){throw new Exception();}
+
+        Task newTask = new Task(
+                taskDTO.getTitle(),
+                taskDTO.getDescription(),
+                taskDTO.getDate(),
+                taskDTO.getPriority());
+
+        taskRepository.createTask(newTask);
+        return newTask;
     }
 
     public Task updateTask(String id, TaskDTO taskDTO) throws Exception {
@@ -26,7 +36,12 @@ public class TaskService
     }
 
     public Task deleteTask(String id) throws Exception {
-        return taskRepository.deleteTask(id);
+
+        Task deleted = taskRepository.deleteTask(id);
+
+        if(deleted == null){throw new Exception();}
+
+        return deleted;
     }
 
     public List<Task> getTasks() throws Exception {
