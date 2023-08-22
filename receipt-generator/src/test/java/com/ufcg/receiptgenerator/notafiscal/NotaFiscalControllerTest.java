@@ -48,8 +48,7 @@ public class NotaFiscalControllerTest {
             .generateNotaFiscal(any(Fatura.class));
 
         //Test
-
-        ResponseEntity<NotaFiscal> response = this.notaFiscalController.generateNotaFiscal(fatura);
+        ResponseEntity response = this.notaFiscalController.generateNotaFiscal(fatura);
 
         // Assert
         assertTrue(response.getBody() instanceof NotaFiscal);
@@ -67,8 +66,7 @@ public class NotaFiscalControllerTest {
             .generateNotaFiscal(any(Fatura.class));
 
         //Test
-
-        ResponseEntity<NotaFiscal> response = this.notaFiscalController.generateNotaFiscal(fatura);
+        ResponseEntity response = this.notaFiscalController.generateNotaFiscal(fatura);
 
         // Assert
         assertTrue(response.getStatusCode().equals(HttpStatus.BAD_REQUEST));
@@ -86,8 +84,7 @@ public class NotaFiscalControllerTest {
             .generateNotaFiscal(any(Fatura.class));
 
         //Test
-
-        ResponseEntity<NotaFiscal> response = this.notaFiscalController.generateNotaFiscal(fatura);
+        ResponseEntity response = this.notaFiscalController.generateNotaFiscal(fatura);
 
         // Assert
         assertTrue(response.getStatusCode().equals(HttpStatus.OK));
