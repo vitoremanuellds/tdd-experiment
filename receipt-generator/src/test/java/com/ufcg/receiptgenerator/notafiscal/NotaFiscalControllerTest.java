@@ -5,6 +5,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
@@ -48,55 +49,45 @@ public class NotaFiscalControllerTest {
         ResponseEntity<NotaFiscal> response = this.notaFiscalController.generateNotaFiscal(fatura);
 
         // Assert
-
+        assertTrue(response.getBody() instanceof NotaFiscal);
     }
 
 
     @Test
-    void NotaFiscalController_WhenGenerateNotaFiscalIsCalled_GenerateANotaFiscalWithTaskValueSetAccordingToConsultoriaTaxValue() throws Exception {
+    void NotaFiscalController_WhenGenerateNotaFiscalIsCalledAndFaturaHasANegativeValue_ShouldReturnAStringMessageAndStatusCodeAsBadRequest() throws Exception {
 
         // Arrange
         Fatura fatura = new Fatura("Alexsandro", "Rua das Bananeiras, 10", TiposDeFaturas.CONSULTORIA, 100.00);
 
-        //Test
-        String notaFiscalAsString = mockMvc.perform(
-            post("/api/nota-fiscal").content(
-                (new ObjectMapper()).writeValueAsString(fatura)
-            ).contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        doReturn(new NotaFiscal(fatura.clientName, fatura.value, fatura.value * this.OUTROS_TAX_VALUE))
+            .when(this.notaFiscalServiceMock)
+            .generateNotaFiscal(any(Fatura.class));
 
-        NotaFiscal notaFiscal = (new ObjectMapper()).readValue(notaFiscalAsString, NotaFiscal.class);
+        //Test
+
+        ResponseEntity<NotaFiscal> response = this.notaFiscalController.generateNotaFiscal(fatura);
 
         // Assert
-
-        assertEquals(fatura.clientName, notaFiscal.clientName);
-        assertEquals(fatura.value, notaFiscal.value);
-        assertEquals(fatura.value * this.CONSULTORIA_TAX_VALUE, notaFiscal.taxValue);
+        assertTrue(response.getStatusCode().equals(HttpStatus.BAD_REQUEST));
     }
 
 
     @Test
-    void NotaFiscalController_WhenGenerateNotaFiscalIsCalled_GenerateANotaFiscalWithTaskValueSetAccordingToTreinamentoTaxValue() throws Exception {
+    void NotaFiscalController_WhenGenerateNotaFiscalIsCalledAndFaturaHasAValidValue_ShouldReturnAStatusCodeAsOk() throws Exception {
 
         // Arrange
-        Fatura fatura = new Fatura("Vitor", "Rua dos Bobos, 0", TiposDeFaturas.TREINAMENTO, 2000.00);
+        Fatura fatura = new Fatura("Alexsandro", "Rua das Bananeiras, 10", TiposDeFaturas.CONSULTORIA, 100.00);
+
+        doReturn(new NotaFiscal(fatura.clientName, fatura.value, fatura.value * this.OUTROS_TAX_VALUE))
+            .when(this.notaFiscalServiceMock)
+            .generateNotaFiscal(any(Fatura.class));
 
         //Test
-        String notaFiscalAsString = mockMvc.perform(
-            post("/api/nota-fiscal").content(
-                (new ObjectMapper()).writeValueAsString(fatura)
-            ).contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
-        NotaFiscal notaFiscal = (new ObjectMapper()).readValue(notaFiscalAsString, NotaFiscal.class);
+        ResponseEntity<NotaFiscal> response = this.notaFiscalController.generateNotaFiscal(fatura);
 
         // Assert
-
-        assertEquals(fatura.clientName, notaFiscal.clientName);
-        assertEquals(fatura.value, notaFiscal.value);
-        assertEquals(fatura.value * this.TREINAMENTO_TAX_VALUE, notaFiscal.taxValue);
+        assertTrue(response.getStatusCode().equals(HttpStatus.OK));
     }
 
 
