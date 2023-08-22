@@ -52,7 +52,7 @@ public class NotaFiscalServiceTest {
         NotaFiscal notaFiscal = this.notaFiscalService.generateNotaFiscal(fatura);
 
         // Assert
-        assertEquals(fatura.value, notaFiscal.value);
+        assertEquals(fatura.getValue(), notaFiscal.getValue());
     }
 
     @Test
@@ -64,7 +64,7 @@ public class NotaFiscalServiceTest {
         NotaFiscal notaFiscal = this.notaFiscalService.generateNotaFiscal(fatura);
 
         // Assert
-        assertEquals(fatura.clientName, notaFiscal.clientName);
+        assertEquals(fatura.getClientName(), notaFiscal.getClientName());
     }
 
     @Test
@@ -76,7 +76,7 @@ public class NotaFiscalServiceTest {
         NotaFiscal notaFiscal = this.notaFiscalService.generateNotaFiscal(fatura);
 
         // Assert
-        assertEquals(fatura.value * this.CONSULTORIA_TAX_VALUE, notaFiscal.taxValue);
+        assertEquals(fatura.getValue() * this.CONSULTORIA_TAX_VALUE, notaFiscal.getTaxValue());
     }
 
     @Test
@@ -88,7 +88,7 @@ public class NotaFiscalServiceTest {
         NotaFiscal notaFiscal = this.notaFiscalService.generateNotaFiscal(fatura);
 
         // Assert
-        assertEquals(fatura.value * this.TREINAMENTO_TAX_VALUE, notaFiscal.taxValue);
+        assertEquals(fatura.getValue() * this.TREINAMENTO_TAX_VALUE, notaFiscal.getTaxValue());
     }
 
     @Test
@@ -100,7 +100,7 @@ public class NotaFiscalServiceTest {
         NotaFiscal notaFiscal = this.notaFiscalService.generateNotaFiscal(fatura);
 
         // Assert
-        assertEquals(fatura.value * this.OUTROS_TAX_VALUE, notaFiscal.taxValue);
+        assertEquals(fatura.getValue() * this.OUTROS_TAX_VALUE, notaFiscal.getTaxValue());
     }
 
     @Test
