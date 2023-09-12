@@ -87,11 +87,14 @@ public class ParticaoDeEquivalencia {
 
         Fatura fatura = new Fatura("Dáphine", "Rua da Alvorada", TiposDeServico.OUTROS, 190.0);
 
+        NotaFiscal notaFiscal = new NotaFiscal("Vitor", 190.0, 11.4);
+
         this.mockMvc.perform(
             MockMvcRequestBuilders.post("/api/nota-fiscal")
             .content((new ObjectMapper()).writeValueAsString(fatura))
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(MockMvcResultMatchers.status().isOk());
+        ).andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.content().string((new ObjectMapper()).writeValueAsString(notaFiscal)));
     }
 }
