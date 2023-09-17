@@ -1,5 +1,8 @@
 package com.ufcg.taskgenerator;
 
+import org.springframework.cglib.core.Local;
+
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -8,11 +11,11 @@ public class Task {
     String id;
     String title;
     String description;
-    String expirationDate;
+    LocalDate expirationDate;
     PRIORITY priority;
 
     public Task(){};
-    public Task(String id, String title, String description, String expirationDate, PRIORITY priority)
+    public Task(String id, String title, String description, LocalDate expirationDate, PRIORITY priority)
     {
         this.id = id;
         this.title = title;
@@ -20,7 +23,7 @@ public class Task {
         this.expirationDate = expirationDate;
         this.priority = priority;
     }
-    public Task(String title, String description, String expirationDate, PRIORITY priority)
+    public Task(String title, String description, LocalDate expirationDate, PRIORITY priority)
     {
         this.id = UUID.randomUUID().toString();
         this.title = title;
@@ -41,7 +44,7 @@ public class Task {
         return description;
     }
 
-    public String getExpirationDate() {
+    public LocalDate getExpirationDate() {
         return expirationDate;
     }
 
@@ -61,7 +64,7 @@ public class Task {
         this.description = description;
     }
 
-    public void setExpirationDate(String expirationDate) {
+    public void setExpirationDate(LocalDate expirationDate) {
         this.expirationDate = expirationDate;
     }
 

@@ -16,6 +16,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,6 +38,10 @@ public class TaskGeneratorIntegrationTests
     TaskService taskService;
     @Autowired
     TaskRepository taskRepository;
+
+    DateTimeFormatter formatter = DateTimeFormatter
+            .ofPattern("dd/MM/uuuu")
+            .withResolverStyle(ResolverStyle.STRICT);
 
     @BeforeEach
     void newRepoHashmap(){this.taskRepository.deleteAll();}
@@ -60,7 +67,7 @@ public class TaskGeneratorIntegrationTests
         testTask.setId(mapTask.get("id"));
         testTask.setTitle(mapTask.get("title"));
         testTask.setDescription(mapTask.get("description"));
-        testTask.setExpirationDate(mapTask.get("expirationDate"));
+        testTask.setExpirationDate(LocalDate.parse(mapTask.get("expirationDate"), formatter));
         testTask.setPriority(
                 Arrays.asList(PRIORITY.values()).stream().filter(p ->
                         p.toString().equals(mapTask.get("priority"))).findFirst().get()
@@ -108,7 +115,7 @@ public class TaskGeneratorIntegrationTests
                 "id",
                 "Lavar Roupa",
                 "Lavar roupa do cesto vermelho",
-                "25/08/2023",
+                LocalDate.parse("25/08/2023", formatter),
                 PRIORITY.MEDIUM);
 
         taskService.addTask(task);
@@ -141,7 +148,7 @@ public class TaskGeneratorIntegrationTests
                         "id",
                         "Lavar Roupa",
                         "Lavar roupa do cesto vermelho",
-                        "25/08/2023",
+                        LocalDate.parse("25/08/2023", formatter),
                         PRIORITY.MEDIUM);
 
         taskService.addTask(task);
@@ -174,7 +181,7 @@ public class TaskGeneratorIntegrationTests
                         "id",
                         "Lavar Roupa",
                         "Lavar roupa do cesto vermelho",
-                        "25/08/2023",
+                        LocalDate.parse("25/08/2023", formatter),
                         PRIORITY.MEDIUM);
 
         taskService.addTask(task);
@@ -211,7 +218,7 @@ public class TaskGeneratorIntegrationTests
         testTask.setId(mapTask.get("id"));
         testTask.setTitle(mapTask.get("title"));
         testTask.setDescription(mapTask.get("description"));
-        testTask.setExpirationDate(mapTask.get("expirationDate"));
+        testTask.setExpirationDate(LocalDate.parse(mapTask.get("expirationDate"), formatter));
         testTask.setPriority(
                 Arrays.asList(PRIORITY.values()).stream().filter(p ->
                         p.toString().equals(mapTask.get("priority"))).findFirst().get()
@@ -246,7 +253,7 @@ public class TaskGeneratorIntegrationTests
         testTask.setId(mapTask.get("id"));
         testTask.setTitle(mapTask.get("title"));
         testTask.setDescription(mapTask.get("description"));
-        testTask.setExpirationDate(mapTask.get("expirationDate"));
+        testTask.setExpirationDate(LocalDate.parse(mapTask.get("expirationDate"), formatter));
         testTask.setPriority(
                 Arrays.asList(PRIORITY.values()).stream().filter(p ->
                         p.toString().equals(mapTask.get("priority"))).findFirst().get()

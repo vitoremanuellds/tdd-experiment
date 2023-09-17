@@ -7,6 +7,11 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
@@ -19,6 +24,10 @@ public class TaskGeneratorEquivalencePartitioningTests {
     @Autowired
     private TaskRepository taskRepository;
 
+    DateTimeFormatter formatter = DateTimeFormatter
+            .ofPattern("dd/MM/uuuu")
+            .withResolverStyle(ResolverStyle.STRICT);
+
     @BeforeEach
     void newRepoHashmap(){this.taskRepository.deleteAll();}
 
@@ -28,12 +37,12 @@ public class TaskGeneratorEquivalencePartitioningTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-01-2024",
+                "01/01/2024",
                 PRIORITY.LOW);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
         // Assert
-        assertEquals(taskDTO.getDate(), newTask.getExpirationDate().parse(dateAsString, formatter));
+        assertEquals(LocalDate.parse(taskDTO.getDate(), formatter), newTask.getExpirationDate());
     }
 
     @Test
@@ -42,12 +51,12 @@ public class TaskGeneratorEquivalencePartitioningTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "28-02-2024",
+                "28/02/2024",
                 PRIORITY.LOW);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
         // Assert
-        assertEquals(taskDTO.getDate(), newTask.getExpirationDate().parse(dateAsString, formatter));
+        assertEquals(LocalDate.parse(taskDTO.getDate(), formatter), newTask.getExpirationDate());
     }
 
     @Test
@@ -56,12 +65,12 @@ public class TaskGeneratorEquivalencePartitioningTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "30-06-2024",
+                "30/06/2024",
                 PRIORITY.LOW);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
         // Assert
-        assertEquals(taskDTO.getDate(), newTask.getExpirationDate().parse(dateAsString, formatter));
+        assertEquals(LocalDate.parse(taskDTO.getDate(), formatter), newTask.getExpirationDate());
     }
 
     @Test
@@ -70,12 +79,12 @@ public class TaskGeneratorEquivalencePartitioningTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "31-01-2024",
+                "31/01/2024",
                 PRIORITY.LOW);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
         // Assert
-        assertEquals(taskDTO.getDate(), newTask.getExpirationDate().parse(dateAsString, formatter));
+        assertEquals(LocalDate.parse(taskDTO.getDate(), formatter), newTask.getExpirationDate());
     }
 
     @Test
@@ -84,7 +93,7 @@ public class TaskGeneratorEquivalencePartitioningTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "29-02-2025",
+                "29/02/2025",
                 PRIORITY.LOW);
         // Assert
         assertThrows(Exception.class, () -> taskServ.createTask(taskDTO));
@@ -96,7 +105,7 @@ public class TaskGeneratorEquivalencePartitioningTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "30-02-2024",
+                "30/02/2024",
                 PRIORITY.LOW);
         // Assert
         assertThrows(Exception.class, () -> taskServ.createTask(taskDTO));
@@ -108,7 +117,7 @@ public class TaskGeneratorEquivalencePartitioningTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "31-06-2024",
+                "31/06/2024",
                 PRIORITY.LOW);
         // Assert
         assertThrows(Exception.class, () -> taskServ.createTask(taskDTO));
@@ -120,12 +129,12 @@ public class TaskGeneratorEquivalencePartitioningTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "29-02-2024",
+                "29/02/2024",
                 PRIORITY.LOW);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
         // Assert
-        assertEquals(taskDTO.getDate(), newTask.getExpirationDate().parse(dateAsString, formatter));
+        assertEquals(LocalDate.parse(taskDTO.getDate(), formatter), newTask.getExpirationDate());
     }
 
     @Test
@@ -134,7 +143,7 @@ public class TaskGeneratorEquivalencePartitioningTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "00-06-2024",
+                "00/06/2024",
                 PRIORITY.LOW);
         // Assert
         assertThrows(Exception.class, () -> taskServ.createTask(taskDTO));
@@ -146,12 +155,12 @@ public class TaskGeneratorEquivalencePartitioningTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-01-2024",
+                "01/01/2024",
                 PRIORITY.LOW);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
         // Assert
-        assertEquals(taskDTO.getDate(), newTask.getExpirationDate().parse(dateAsString, formatter));
+        assertEquals(LocalDate.parse(taskDTO.getDate(), formatter), newTask.getExpirationDate());
     }
 
     @Test
@@ -160,12 +169,12 @@ public class TaskGeneratorEquivalencePartitioningTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-12-2024",
+                "01/12/2024",
                 PRIORITY.LOW);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
         // Assert
-        assertEquals(taskDTO.getDate(), newTask.getExpirationDate().parse(dateAsString, formatter));
+        assertEquals(LocalDate.parse(taskDTO.getDate(), formatter), newTask.getExpirationDate());
     }
 
     @Test
@@ -174,7 +183,7 @@ public class TaskGeneratorEquivalencePartitioningTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-00-2024",
+                "01/00/2024",
                 PRIORITY.LOW);
         // Assert
         assertThrows(Exception.class, () -> taskServ.createTask(taskDTO));
@@ -186,7 +195,7 @@ public class TaskGeneratorEquivalencePartitioningTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-13-2024",
+                "01/13/2024",
                 PRIORITY.LOW);
         // Assert
         assertThrows(Exception.class, () -> taskServ.createTask(taskDTO));
@@ -198,7 +207,7 @@ public class TaskGeneratorEquivalencePartitioningTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-13-2022",
+                "01/13/2022",
                 PRIORITY.LOW);
         // Assert
         assertThrows(Exception.class, () -> taskServ.createTask(taskDTO));
@@ -210,7 +219,7 @@ public class TaskGeneratorEquivalencePartitioningTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-13--1",
+                "01/13/-1",
                 PRIORITY.LOW);
         // Assert
         assertThrows(Exception.class, () -> taskServ.createTask(taskDTO));
@@ -222,7 +231,7 @@ public class TaskGeneratorEquivalencePartitioningTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-13--1",
+                "01/13/-1",
                 null);
         // Assert
         assertThrows(Exception.class, () -> taskServ.createTask(taskDTO));
@@ -234,12 +243,12 @@ public class TaskGeneratorEquivalencePartitioningTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-01-2024",
+                "01/01/2024",
                 PRIORITY.LOW);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
         // Assert
-        assertEquals(taskDTO.getDate(), newTask.getExpirationDate().parse(dateAsString, formatter));
+        assertEquals(taskDTO.getTitle(), newTask.getTitle());
     }
 
     @Test
@@ -248,12 +257,12 @@ public class TaskGeneratorEquivalencePartitioningTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-01-2024",
+                "01/01/2024",
                 PRIORITY.MEDIUM);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
         // Assert
-        assertEquals(taskDTO.getDate(), newTask.getExpirationDate().parse(dateAsString, formatter));
+        assertEquals(taskDTO.getTitle(), newTask.getTitle());
     }
 
     @Test
@@ -262,25 +271,25 @@ public class TaskGeneratorEquivalencePartitioningTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-01-2024",
+                "01/01/2024",
                 PRIORITY.HIGH);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
         // Assert
-        assertEquals(taskDTO.getDate(), newTask.getExpirationDate().parse(dateAsString, formatter));
+        assertEquals(taskDTO.getTitle(), newTask.getTitle());
     }
 
     @Test
-    void Should_CreateTask_When_ValidPriority_Case3() throws Exception {
+    void Should_CreateTask_When_ValidPriority_Case5() throws Exception {
         // Arrange
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-01-2024",
+                "01/01/2024",
                 PRIORITY.NIL);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
         // Assert
-        assertEquals(taskDTO.getDate(), newTask.getExpirationDate().parse(dateAsString, formatter));
+        assertEquals(taskDTO.getTitle(), newTask.getTitle());
     }
 }

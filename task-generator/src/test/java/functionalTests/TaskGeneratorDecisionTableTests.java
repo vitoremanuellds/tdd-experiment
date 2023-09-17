@@ -31,7 +31,7 @@ public class TaskGeneratorDecisionTableTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-01-2024",
+                "01/01/2024",
                 PRIORITY.LOW);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
@@ -45,7 +45,7 @@ public class TaskGeneratorDecisionTableTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "30-02-2024",
+                "30/02/2024",
                 PRIORITY.NIL);
         // Assert
         assertThrows(Exception.class, () -> taskServ.createTask(taskDTO));
@@ -93,7 +93,7 @@ public class TaskGeneratorDecisionTableTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-01-2024",
+                "01/01/2024",
                 PRIORITY.LOW);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
@@ -108,7 +108,7 @@ public class TaskGeneratorDecisionTableTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-01-2024",
+                "01/01/2024",
                 PRIORITY.LOW);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
@@ -123,7 +123,7 @@ public class TaskGeneratorDecisionTableTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-01-2024",
+                "01/01/2024",
                 PRIORITY.LOW);
         // Test
         String invalidId = UUID.randomUUID().toString();
@@ -137,12 +137,12 @@ public class TaskGeneratorDecisionTableTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-01-2024",
+                "01/01/2024",
                 PRIORITY.LOW);
         TaskDTO edit = new TaskDTO(
                 "edited",
                 "test edited",
-                "02-01-2024",
+                "02/01/2024",
                 PRIORITY.MEDIUM);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
@@ -162,7 +162,7 @@ public class TaskGeneratorDecisionTableTests {
         TaskDTO edit = new TaskDTO(
                 "edited",
                 "test edited",
-                "02-01-2024",
+                "02/01/2024",
                 PRIORITY.NIL);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
@@ -176,7 +176,7 @@ public class TaskGeneratorDecisionTableTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-01-2024",
+                "01/01/2024",
                 PRIORITY.LOW);
         TaskDTO edit = new TaskDTO(
                 "edited",
@@ -195,7 +195,7 @@ public class TaskGeneratorDecisionTableTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-01-2024",
+                "01/01/2024",
                 PRIORITY.LOW);
         TaskDTO edit = new TaskDTO(
                 null,
@@ -214,7 +214,7 @@ public class TaskGeneratorDecisionTableTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-01-2024",
+                "01/01/2024",
                 PRIORITY.LOW);
         TaskDTO edit = new TaskDTO(
                 "edited",

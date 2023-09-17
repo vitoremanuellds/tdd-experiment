@@ -7,6 +7,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
 
@@ -27,7 +28,7 @@ public class TaskGeneratorBVATests {
     void newRepoHashmap(){this.taskRepository.deleteAll();}
 
     DateTimeFormatter formatter = DateTimeFormatter
-            .ofPattern("dd-MM-uuuu")
+            .ofPattern("dd/MM/uuuu")
             .withResolverStyle(ResolverStyle.STRICT);
 
     @Test
@@ -36,12 +37,12 @@ public class TaskGeneratorBVATests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-02-2025",
+                "01/02/2025",
                 PRIORITY.LOW);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
         // Assert
-        assertEquals(taskDTO.getDate(), newTask.getExpirationDate().parse(dateAsString, formatter));
+        assertEquals(LocalDate.parse(taskDTO.getDate(), formatter), newTask.getExpirationDate());
     }
 
     @Test
@@ -50,12 +51,12 @@ public class TaskGeneratorBVATests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "15-02-2025",
+                "15/02/2025",
                 PRIORITY.LOW);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
         // Assert
-        assertEquals(taskDTO.getDate(), newTask.getExpirationDate().parse(dateAsString, formatter));
+        assertEquals(LocalDate.parse(taskDTO.getDate(), formatter), newTask.getExpirationDate());
     }
 
     @Test
@@ -64,12 +65,12 @@ public class TaskGeneratorBVATests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "30-04-2025",
+                "30/04/2025",
                 PRIORITY.LOW);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
         // Assert
-        assertEquals(taskDTO.getDate(), newTask.getExpirationDate().parse(dateAsString, formatter));
+        assertEquals(LocalDate.parse(taskDTO.getDate(), formatter), newTask.getExpirationDate());
     }
 
     @Test
@@ -95,7 +96,7 @@ public class TaskGeneratorBVATests {
         // Test
         Task newTask = taskServ.createTask(taskDTO);
         // Assert
-        assertEquals(taskDTO.getDate(), newTask.getExpirationDate().parse(dateAsString, formatter));
+        assertEquals(LocalDate.parse(taskDTO.getDate(), formatter), newTask.getExpirationDate());
     }
 
     @Test
@@ -109,7 +110,7 @@ public class TaskGeneratorBVATests {
         // Test
         Task newTask = taskServ.createTask(taskDTO);
         // Assert
-        assertEquals(taskDTO.getDate(), newTask.getExpirationDate().parse(dateAsString, formatter));
+        assertEquals(LocalDate.parse(taskDTO.getDate(), formatter), newTask.getExpirationDate());
     }
 
     @Test
@@ -123,7 +124,7 @@ public class TaskGeneratorBVATests {
         // Test
         Task newTask = taskServ.createTask(taskDTO);
         // Assert
-        assertEquals(taskDTO.getDate(), newTask.getExpirationDate().parse(dateAsString, formatter));
+        assertEquals(LocalDate.parse(taskDTO.getDate(), formatter), newTask.getExpirationDate());
     }
 
     @Test
@@ -161,7 +162,7 @@ public class TaskGeneratorBVATests {
         // Test
         Task newTask = taskServ.createTask(taskDTO);
         // Assert
-        assertEquals(taskDTO.getDate(), newTask.getExpirationDate().parse(dateAsString, formatter));
+        assertEquals(LocalDate.parse(taskDTO.getDate(), formatter), newTask.getExpirationDate());
     }
 
     @Test
@@ -175,7 +176,7 @@ public class TaskGeneratorBVATests {
         // Test
         Task newTask = taskServ.createTask(taskDTO);
         // Assert
-        assertEquals(taskDTO.getDate(), newTask.getExpirationDate().parse(dateAsString, formatter));
+        assertEquals(LocalDate.parse(taskDTO.getDate(), formatter), newTask.getExpirationDate());
     }
 
     @Test
