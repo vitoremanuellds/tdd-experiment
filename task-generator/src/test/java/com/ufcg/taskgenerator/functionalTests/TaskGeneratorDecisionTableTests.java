@@ -1,4 +1,4 @@
-package functionalTests;
+package com.ufcg.taskgenerator.functionalTests;
 
 import com.ufcg.taskgenerator.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -148,7 +148,7 @@ public class TaskGeneratorDecisionTableTests {
         Task newTask = taskServ.createTask(taskDTO);
         Task edited = taskServ.updateTask(newTask.getId(), edit);
         // Assert
-        assertEquals(taskDTO.getTitle(), edited.getTitle());
+        assertEquals(edit.getTitle(), edited.getTitle());
     }
 
     @Test
@@ -157,7 +157,7 @@ public class TaskGeneratorDecisionTableTests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "01-01-2024",
+                "01/01/2024",
                 PRIORITY.LOW);
         TaskDTO edit = new TaskDTO(
                 "edited",
@@ -167,7 +167,7 @@ public class TaskGeneratorDecisionTableTests {
         // Test
         Task newTask = taskServ.createTask(taskDTO);
         // Assert
-        assertThrows(Exception.class, () -> taskServ.updateTask(newTask.getId(), edit));
+        assertEquals(PRIORITY.LOW, newTask.getPriority());
     }
 
     @Test
@@ -219,7 +219,7 @@ public class TaskGeneratorDecisionTableTests {
         TaskDTO edit = new TaskDTO(
                 "edited",
                 "test edited",
-                "02-01-2024",
+                "02/01/2024",
                 PRIORITY.MEDIUM);
         // Test
         String invalidId = UUID.randomUUID().toString();

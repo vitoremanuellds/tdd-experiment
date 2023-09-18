@@ -1,4 +1,4 @@
-package functionalTests;
+package com.ufcg.taskgenerator.functionalTests;
 
 import com.ufcg.taskgenerator.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -79,7 +80,7 @@ public class TaskGeneratorBVATests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "31-04-2025",
+                "31/04/2025",
                 PRIORITY.LOW);
         // Assert
         assertThrows(Exception.class, () -> taskServ.createTask(taskDTO));
@@ -91,7 +92,7 @@ public class TaskGeneratorBVATests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "30-01-2025",
+                "30/01/2025",
                 PRIORITY.LOW);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
@@ -105,7 +106,7 @@ public class TaskGeneratorBVATests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "31-01-2025",
+                "31/01/2025",
                 PRIORITY.LOW);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
@@ -119,7 +120,7 @@ public class TaskGeneratorBVATests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "28-02-2025",
+                "28/02/2025",
                 PRIORITY.LOW);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
@@ -133,7 +134,7 @@ public class TaskGeneratorBVATests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "29-02-2025",
+                "29/02/2025",
                 PRIORITY.LOW);
         // Assert
         assertThrows(Exception.class, () -> taskServ.createTask(taskDTO));
@@ -145,7 +146,7 @@ public class TaskGeneratorBVATests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "30-02-2025",
+                "30/02/2025",
                 PRIORITY.LOW);
         // Assert
         assertThrows(Exception.class, () -> taskServ.createTask(taskDTO));
@@ -157,7 +158,7 @@ public class TaskGeneratorBVATests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "28-02-2024",
+                "28/02/2024",
                 PRIORITY.LOW);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
@@ -171,7 +172,7 @@ public class TaskGeneratorBVATests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "29-02-2024",
+                "29/02/2024",
                 PRIORITY.LOW);
         // Test
         Task newTask = taskServ.createTask(taskDTO);
@@ -185,7 +186,7 @@ public class TaskGeneratorBVATests {
         TaskDTO taskDTO = new TaskDTO(
                 "test",
                 "test discription",
-                "28-02-2025",
+                "30/02/2025",
                 PRIORITY.LOW);
         // Assert
         assertThrows(Exception.class, () -> taskServ.createTask(taskDTO));

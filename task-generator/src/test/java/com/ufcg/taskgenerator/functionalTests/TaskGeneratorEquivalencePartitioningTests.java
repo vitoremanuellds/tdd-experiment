@@ -1,4 +1,4 @@
-package functionalTests;
+package com.ufcg.taskgenerator.functionalTests;
 
 import com.ufcg.taskgenerator.*;
 import org.junit.jupiter.api.BeforeEach;
