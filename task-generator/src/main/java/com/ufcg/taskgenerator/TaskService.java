@@ -25,12 +25,14 @@ public class TaskService
     public Task createTask(TaskDTO taskDTO) throws Exception {
 
         if(taskDTO.getTitle().isEmpty()){throw new Exception();}
+        PRIORITY priority = taskDTO.getPriority();
+        if(priority == PRIORITY.NIL){priority = PRIORITY.LOW;}
 
         Task newTask = new Task(
                 taskDTO.getTitle(),
                 taskDTO.getDescription(),
                 LocalDate.parse(taskDTO.getDate(), formatter),
-                taskDTO.getPriority());
+                priority);
 
         taskRepository.createTask(newTask);
         return newTask;
