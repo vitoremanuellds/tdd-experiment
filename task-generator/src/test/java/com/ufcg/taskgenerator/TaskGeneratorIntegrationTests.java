@@ -67,7 +67,7 @@ public class TaskGeneratorIntegrationTests
         testTask.setId(mapTask.get("id"));
         testTask.setTitle(mapTask.get("title"));
         testTask.setDescription(mapTask.get("description"));
-        testTask.setExpirationDate(LocalDate.parse(mapTask.get("expirationDate"), formatter));
+        testTask.setExpirationDate(LocalDate.parse(mapTask.get("expirationDate")));
         testTask.setPriority(
                 Arrays.asList(PRIORITY.values()).stream().filter(p ->
                         p.toString().equals(mapTask.get("priority"))).findFirst().get()
@@ -76,7 +76,7 @@ public class TaskGeneratorIntegrationTests
         // Assert
         assertEquals(task.getTitle(), testTask.getTitle());
         assertEquals(task.getDescription(), testTask.getDescription());
-        assertEquals("25/08/2023", testTask.getExpirationDate());
+        assertEquals(LocalDate.parse("25/08/2023", formatter), testTask.getExpirationDate());
         assertEquals(task.getPriority(), testTask.getPriority());
     }
 
@@ -129,7 +129,7 @@ public class TaskGeneratorIntegrationTests
         // Assert
         assertEquals(task.getTitle(), taskDTO.getTitle());
         assertEquals(task.getDescription(), taskDTO.getDescription());
-        assertEquals(task.getExpirationDate(),"24/08/2023");
+        assertEquals(task.getExpirationDate(),LocalDate.parse("24/08/2023", formatter));
         assertEquals(task.getPriority(), taskDTO.getPriority());
     }
 
@@ -162,7 +162,7 @@ public class TaskGeneratorIntegrationTests
         // Assert
         assertNotEquals(task.getTitle(), taskDTO.getTitle());
         assertNotEquals(task.getDescription(), taskDTO.getDescription());
-        assertEquals(task.getExpirationDate(),"24/08/2023");
+        assertEquals(task.getExpirationDate(),LocalDate.parse("24/08/2023", formatter));
         assertEquals(task.getPriority(), taskDTO.getPriority());
     }
 
@@ -218,7 +218,7 @@ public class TaskGeneratorIntegrationTests
         testTask.setId(mapTask.get("id"));
         testTask.setTitle(mapTask.get("title"));
         testTask.setDescription(mapTask.get("description"));
-        testTask.setExpirationDate(LocalDate.parse(mapTask.get("expirationDate"), formatter));
+        testTask.setExpirationDate(LocalDate.parse(mapTask.get("expirationDate")));
         testTask.setPriority(
                 Arrays.asList(PRIORITY.values()).stream().filter(p ->
                         p.toString().equals(mapTask.get("priority"))).findFirst().get()
@@ -253,7 +253,7 @@ public class TaskGeneratorIntegrationTests
         testTask.setId(mapTask.get("id"));
         testTask.setTitle(mapTask.get("title"));
         testTask.setDescription(mapTask.get("description"));
-        testTask.setExpirationDate(LocalDate.parse(mapTask.get("expirationDate"), formatter));
+        testTask.setExpirationDate(LocalDate.parse(mapTask.get("expirationDate")));
         testTask.setPriority(
                 Arrays.asList(PRIORITY.values()).stream().filter(p ->
                         p.toString().equals(mapTask.get("priority"))).findFirst().get()
