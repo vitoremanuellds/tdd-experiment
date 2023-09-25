@@ -26,6 +26,8 @@ public class NotaFiscalService {
     public NotaFiscal generateNotaFiscal(Fatura fatura) throws InvalidFaturaValueException {
         
         if (fatura.getValue() < 0) throw new InvalidFaturaValueException("O valor da fatura é inválido! Valor não pode ser negativo!");
+        if (fatura.getClientName() == null || fatura.getClientName().isEmpty()) throw new InvalidFaturaValueException("O nome do cliente na fatura é inválido! O nome não pode ser vazio!");
+        if (fatura.getEndereco() == null || fatura.getEndereco().isEmpty()) throw new InvalidFaturaValueException("O endereço do cliente na fatura é inválido! O endereço não pode ser vazio!");
         
         NotaFiscal notaFiscal = new NotaFiscal();
         

@@ -1,4 +1,4 @@
-package com.ufcg.receiptgenerator.functionalTests;
+package com.ufcg.receiptgenerator.junit5Tests;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
